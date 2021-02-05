@@ -390,7 +390,7 @@ MonoBehaviour:
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
-    m_InvertInput: 1
+    m_InvertInput: 0
     m_MinValue: -180
     m_MaxValue: 180
     m_Wrap: 1
@@ -1480,7 +1480,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1197609328}
-  m_LocalRotation: {x: 0.17309904, y: 0.000000010156033, z: -0.0000000017849442, w: 0.98490447}
+  m_LocalRotation: {x: 0.17309904, y: 0.000000010167938, z: -0.0000000017870366, w: 0.98490447}
   m_LocalPosition: {x: 0, y: 6.4431453, z: -12.727111}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1619,7 +1619,7 @@ MonoBehaviour:
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
-    m_InvertInput: 1
+    m_InvertInput: 0
     m_MinValue: -180
     m_MaxValue: 180
     m_Wrap: 1
@@ -1929,7 +1929,7 @@ MonoBehaviour:
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
-    m_InvertInput: 1
+    m_InvertInput: 0
     m_MinValue: -180
     m_MaxValue: 180
     m_Wrap: 1
@@ -2021,7 +2021,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1427799482}
-  m_LocalRotation: {x: -0.14801085, y: 0.000000013732036, z: 0.000000018559527, w: -0.9889858}
+  m_LocalRotation: {x: -0.14801086, y: -0.000000020237389, z: 0.000000023643365, w: -0.9889858}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2095,7 +2095,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583516930}
-  m_LocalRotation: {x: -0.18383802, y: 9.427816e-10, z: -0.000000005040923, w: -0.9829566}
+  m_LocalRotation: {x: -0.18383802, y: 9.427819e-10, z: -0.000000005040923, w: -0.9829566}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2202,7 +2202,7 @@ MonoBehaviour:
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
-    m_InvertInput: 1
+    m_InvertInput: 0
     m_MinValue: -180
     m_MaxValue: 180
     m_Wrap: 1
@@ -2639,7 +2639,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047828997}
-  m_LocalRotation: {x: -0.16592814, y: -0.000000008377541, z: 0.000000001025971, w: -0.98613787}
+  m_LocalRotation: {x: -0.16592814, y: -0.000000008417342, z: 0.0000000010326678,
+    w: -0.98613787}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
