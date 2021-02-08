@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Drukan
   chatText: If you give me 5g
-  timer: 0
+  timer: 1

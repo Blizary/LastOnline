@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Drukan
   chatText: I will listen to you billy
-  timer: 0
+  timer: 5

@@ -16,4 +16,13 @@ public class FarPersonManager : MonoBehaviour
     {
         
     }
+
+
+    /// <summary>
+    /// Copies the chats into list to be used during the game
+    /// </summary>
+    void CopyChats()
+    {
+
+    }
 }

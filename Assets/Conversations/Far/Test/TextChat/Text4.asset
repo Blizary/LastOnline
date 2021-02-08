@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Billy
   chatText: Oh come on man  dont be like that
-  timer: 0
+  timer: 2
