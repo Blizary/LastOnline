@@ -41,7 +41,7 @@ public class ChatBoxManager : MonoBehaviour
     void Update()
     {
         ShowScrollButtons();
-        
+
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public class ChatBoxManager : MonoBehaviour
     /// <param name="_nextMessage"></param>
     void ReadNextMessage(int _chat, int _message)
     {
-        if(chats[_chat].conversation.Count>_message)//check if there are any messages left in this conversation
+        if (chats[_chat].conversation.Count > _message)//check if there are any messages left in this conversation
         {
 
             for (int i = 0; i < chats[_chat].conversation[_message].chatText.Count; i++)//for each line in this message
@@ -70,11 +70,11 @@ public class ChatBoxManager : MonoBehaviour
                 CheckOverflow(0);//check if overflow
             }
 
-           
+
 
             StartCoroutine(WaitForNextSentence(chats[_chat].conversation[_message].timer, _chat, _message + 1));
         }
-       
+
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ public class ChatBoxManager : MonoBehaviour
     /// </summary>
     void ReadChatLists()
     {
-        for(int i = 0; i<manager.chatbox.Count;i++)
+        for (int i = 0; i < manager.chatbox.Count; i++)
         {
             chats.Add(manager.chatbox[i]);
         }
@@ -92,7 +92,7 @@ public class ChatBoxManager : MonoBehaviour
 
     void StartChat()
     {
-        for(int i=0;i<chats.Count;i++)
+        for (int i = 0; i < chats.Count; i++)
         {
             StartCoroutine(WaitForNextSentence(chats[i].conversation[0].timer, i, 0));
             List<string> newstrings = new List<string>();
@@ -101,7 +101,7 @@ public class ChatBoxManager : MonoBehaviour
         }
     }
 
-    IEnumerator WaitForNextSentence(float _timer,int _chat, int _message)
+    IEnumerator WaitForNextSentence(float _timer, int _chat, int _message)
     {
         //wait for timer
         yield return new WaitForSeconds(_timer);
@@ -112,7 +112,7 @@ public class ChatBoxManager : MonoBehaviour
     void CheckOverflow(int _chat)
     {
         Debug.Log("Num of child: " + generalTextContainer.transform.childCount);
-        if (generalTextContainer.transform.childCount>8)
+        if (generalTextContainer.transform.childCount > 8)
         {
             Debug.Log("destroyed 1 child");
             GameObject trashtext = generalTextContainer.transform.GetChild(0).gameObject;
@@ -124,7 +124,7 @@ public class ChatBoxManager : MonoBehaviour
 
     void ShowScrollButtons()
     {
-        if(chatNumb[currentChat] > 8)
+        if (chatNumb[currentChat] > 8)
         {
             scrollUpTextButton.SetActive(true);
         }
@@ -134,7 +134,7 @@ public class ChatBoxManager : MonoBehaviour
         }
 
 
-        if(chatNumb[currentChat]< savedChats[currentChat].Count)
+        if (chatNumb[currentChat] < savedChats[currentChat].Count)
         {
             scrollDownTextButton.SetActive(true);
         }
@@ -154,14 +154,14 @@ public class ChatBoxManager : MonoBehaviour
         chatNumb[0] -= 1;
         //add i-6
         GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
-        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0]-8];
+        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0] - 8];
         newText.transform.SetAsFirstSibling();
 
 
-      
+
 
         chatNumb[0] -= 1;
-       
+
 
     }
 
@@ -170,7 +170,7 @@ public class ChatBoxManager : MonoBehaviour
 
         //add i+1
         GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
-        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0]+1];
+        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0] + 1];
 
         //remove i-6
         GameObject trashtext = generalTextContainer.transform.GetChild(0).gameObject;
