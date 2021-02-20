@@ -16,6 +16,7 @@ public class ChatBoxManager : MonoBehaviour
     private List<List<string>> savedChats;
     private List<int> chatNumb;
     private int currentChat;
+    private bool scrolling;
 
     private int currentChatIndx;
     private FarPersonManager manager;
@@ -32,6 +33,7 @@ public class ChatBoxManager : MonoBehaviour
         savedChats = new List<List<string>>();
         currentChat = 0;
         manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<FarPersonManager>();
+        scrolling = false;
         messageFinnish = false;
         ReadChatLists();
         StartChat();
@@ -55,19 +57,26 @@ public class ChatBoxManager : MonoBehaviour
 
             for (int i = 0; i < chats[_chat].conversation[_message].chatText.Count; i++)//for each line in this message
             {
-                GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);//create a new line 
                 savedChats[_chat].Add(chats[_chat].conversation[_message].chatText[i]); //add text to saved for that chat
-                if (i == 0)//check if it is the 1st message so the name is added
-                {
-                    newText.GetComponent<TextMeshProUGUI>().text = "[" + chats[_chat].conversation[_message].characterName + "] " + chats[_chat].conversation[_message].chatText[i];
-                }
-                else//dont add name
-                {
-                    newText.GetComponent<TextMeshProUGUI>().text = chats[_chat].conversation[_message].chatText[i];
-                }
-                chatNumb[0] += 1;//current chat possion
 
-                CheckOverflow(0);//check if overflow
+                //check if the scroll up is active
+                if(!scrolling)
+                {
+                    GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);//create a new line        
+                    if (i == 0)//check if it is the 1st message so the name is added
+                    {
+                        newText.GetComponent<TextMeshProUGUI>().text = "[" + chats[_chat].conversation[_message].characterName + "] " + chats[_chat].conversation[_message].chatText[i];
+                    }
+                    else//dont add name
+                    {
+                        newText.GetComponent<TextMeshProUGUI>().text = chats[_chat].conversation[_message].chatText[i];
+                    }
+                    chatNumb[0] += 1;//current chat possion
+
+                    CheckOverflow(0);//check if overflow
+                }
+
+               
             }
 
 
@@ -134,7 +143,7 @@ public class ChatBoxManager : MonoBehaviour
         }
 
 
-        if (chatNumb[currentChat] < savedChats[currentChat].Count)
+        if (chatNumb[currentChat] < savedChats[currentChat].Count-1)
         {
             scrollDownTextButton.SetActive(true);
         }
@@ -146,8 +155,9 @@ public class ChatBoxManager : MonoBehaviour
 
     public void ScrollUpText()
     {
+        scrolling = true;
         //remove i
-        GameObject trashtext = generalTextContainer.transform.GetChild(chatNumb[0]).gameObject;
+        GameObject trashtext = generalTextContainer.transform.GetChild(generalTextContainer.transform.childCount-1).gameObject;
         trashtext.transform.SetParent(UITrash.transform);
         Destroy(trashtext);
 
@@ -156,11 +166,6 @@ public class ChatBoxManager : MonoBehaviour
         GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
         newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0] - 8];
         newText.transform.SetAsFirstSibling();
-
-
-
-
-        chatNumb[0] -= 1;
 
 
     }
@@ -178,6 +183,12 @@ public class ChatBoxManager : MonoBehaviour
         Destroy(trashtext);
 
         chatNumb[0] += 1;
+
+        //check if the player is on the last available message
+        if(chatNumb[0] == savedChats[currentChat].Count-1)
+        {
+            scrolling = false;
+        }
     }
 
 }
