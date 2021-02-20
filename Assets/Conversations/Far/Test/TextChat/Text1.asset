@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Text1
   m_EditorClassIdentifier: 
   characterName: Billy
-  chatText: Hows everyone today =)
+  chatText:
+  - Hows everyone doing today?
   timer: 0

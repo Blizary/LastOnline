@@ -13,5 +13,8 @@ MonoBehaviour:
   m_Name: Text3
   m_EditorClassIdentifier: 
   characterName: Cheapnozzle
-  chatText: WTS LEVELING BOOST! Cheat ! pm for more info
+  chatText:
+  - WTS raid boost. Best prices
+  - in the market. Fast , cheat and easy pm
+  - for more info
   timer: 3

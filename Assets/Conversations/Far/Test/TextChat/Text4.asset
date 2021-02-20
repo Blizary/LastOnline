@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Text4
   m_EditorClassIdentifier: 
   characterName: Billy
-  chatText: Oh come on man  dont be like that
+  chatText:
+  - Oh man come on
   timer: 2

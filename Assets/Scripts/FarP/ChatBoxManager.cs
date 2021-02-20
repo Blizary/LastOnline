@@ -7,11 +7,19 @@ public class ChatBoxManager : MonoBehaviour
 {
 
     public GameObject generalTextContainer;//original text obj in the world used to render all text
+    public GameObject textPrefab;
+    public GameObject scrollUpTextButton;
+    public GameObject scrollDownTextButton;
+    public GameObject UITrash;
 
-    private List<List<ChatText>> chats;
+    private List<ChatConv> chats;
+    private List<List<string>> savedChats;
+    private List<int> chatNumb;
+    private int currentChat;
 
     private int currentChatIndx;
     private FarPersonManager manager;
+
 
     private float innerTimer;
     private bool messageFinnish;
@@ -19,7 +27,10 @@ public class ChatBoxManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        chats = new List<List<ChatText>>();
+        chats = new List<ChatConv>();
+        chatNumb = new List<int>();
+        savedChats = new List<List<string>>();
+        currentChat = 0;
         manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<FarPersonManager>();
         messageFinnish = false;
         ReadChatLists();
@@ -29,6 +40,8 @@ public class ChatBoxManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ShowScrollButtons();
+        
     }
 
     /// <summary>
@@ -37,8 +50,31 @@ public class ChatBoxManager : MonoBehaviour
     /// <param name="_nextMessage"></param>
     void ReadNextMessage(int _chat, int _message)
     {
-        generalTextContainer.GetComponent<TextMeshProUGUI>().text += " \n[" + chats[_chat][_message].characterName + "] " + chats[_chat][_message].chatText;
-        StartCoroutine( WaitForNextSentence(chats[_chat][_message].timer, _chat, _message+1));
+        if(chats[_chat].conversation.Count>_message)//check if there are any messages left in this conversation
+        {
+
+            for (int i = 0; i < chats[_chat].conversation[_message].chatText.Count; i++)//for each line in this message
+            {
+                GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);//create a new line 
+                savedChats[_chat].Add(chats[_chat].conversation[_message].chatText[i]); //add text to saved for that chat
+                if (i == 0)//check if it is the 1st message so the name is added
+                {
+                    newText.GetComponent<TextMeshProUGUI>().text = "[" + chats[_chat].conversation[_message].characterName + "] " + chats[_chat].conversation[_message].chatText[i];
+                }
+                else//dont add name
+                {
+                    newText.GetComponent<TextMeshProUGUI>().text = chats[_chat].conversation[_message].chatText[i];
+                }
+                chatNumb[0] += 1;//current chat possion
+
+                CheckOverflow(0);//check if overflow
+            }
+
+           
+
+            StartCoroutine(WaitForNextSentence(chats[_chat].conversation[_message].timer, _chat, _message + 1));
+        }
+       
     }
 
     /// <summary>
@@ -49,13 +85,7 @@ public class ChatBoxManager : MonoBehaviour
     {
         for(int i = 0; i<manager.chatbox.Count;i++)
         {
-
-            List<ChatText> newchat = new List<ChatText>();
-            for(int j = 0; j<manager.chatbox[i].conversation.Count;j++)
-            {
-                newchat.Add(manager.chatbox[i].conversation[j]);
-            }
-            chats.Add(newchat);
+            chats.Add(manager.chatbox[i]);
         }
     }
 
@@ -64,7 +94,10 @@ public class ChatBoxManager : MonoBehaviour
     {
         for(int i=0;i<chats.Count;i++)
         {
-            StartCoroutine(WaitForNextSentence(chats[i][0].timer, i, 0));
+            StartCoroutine(WaitForNextSentence(chats[i].conversation[0].timer, i, 0));
+            List<string> newstrings = new List<string>();
+            savedChats.Add(newstrings);
+            chatNumb.Add(0);
         }
     }
 
@@ -74,6 +107,77 @@ public class ChatBoxManager : MonoBehaviour
         yield return new WaitForSeconds(_timer);
         //read next message
         ReadNextMessage(_chat, _message);
+    }
+
+    void CheckOverflow(int _chat)
+    {
+        Debug.Log("Num of child: " + generalTextContainer.transform.childCount);
+        if (generalTextContainer.transform.childCount>8)
+        {
+            Debug.Log("destroyed 1 child");
+            GameObject trashtext = generalTextContainer.transform.GetChild(0).gameObject;
+            trashtext.transform.SetParent(UITrash.transform);
+            Destroy(trashtext);
+
+        }
+    }
+
+    void ShowScrollButtons()
+    {
+        if(chatNumb[currentChat] > 8)
+        {
+            scrollUpTextButton.SetActive(true);
+        }
+        else
+        {
+            scrollUpTextButton.SetActive(false);
+        }
+
+
+        if(chatNumb[currentChat]< savedChats[currentChat].Count)
+        {
+            scrollDownTextButton.SetActive(true);
+        }
+        else
+        {
+            scrollDownTextButton.SetActive(false);
+        }
+    }
+
+    public void ScrollUpText()
+    {
+        //remove i
+        GameObject trashtext = generalTextContainer.transform.GetChild(chatNumb[0]).gameObject;
+        trashtext.transform.SetParent(UITrash.transform);
+        Destroy(trashtext);
+
+        chatNumb[0] -= 1;
+        //add i-6
+        GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
+        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0]-8];
+        newText.transform.SetAsFirstSibling();
+
+
+      
+
+        chatNumb[0] -= 1;
+       
+
+    }
+
+    public void ScrollDownText()
+    {
+
+        //add i+1
+        GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
+        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0]+1];
+
+        //remove i-6
+        GameObject trashtext = generalTextContainer.transform.GetChild(0).gameObject;
+        trashtext.transform.SetParent(UITrash.transform);
+        Destroy(trashtext);
+
+        chatNumb[0] += 1;
     }
 
 }

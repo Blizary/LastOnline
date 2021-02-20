@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Text5
   m_EditorClassIdentifier: 
   characterName: Drukan
-  chatText: I will listen to you billy
+  chatText:
+  - Just an other day
   timer: 5

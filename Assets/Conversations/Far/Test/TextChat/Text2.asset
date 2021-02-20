@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Text2
   m_EditorClassIdentifier: 
   characterName: FlameMaster
-  chatText: God damn billy stop talking in general
+  chatText:
+  - God damn it billy stop using
+  - the general chat to talk
   timer: 2
