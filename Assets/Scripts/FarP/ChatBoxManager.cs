@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class ChatBoxManager : MonoBehaviour
 {
-
+    public GameObject tabsContainer;
+    public GameObject tabsPrefab;
     public GameObject generalTextContainer;//original text obj in the world used to render all text
     public GameObject textPrefab;
     public GameObject scrollUpTextButton;
@@ -59,6 +60,8 @@ public class ChatBoxManager : MonoBehaviour
     {
         if (chats[_chat].conversation.Count > _message)//check if there are any messages left in this conversation
         {
+            //check if it is a private chat
+
 
             for (int i = 0; i < chats[_chat].conversation[_message].chatText.Count; i++)//for each line in this message
             {

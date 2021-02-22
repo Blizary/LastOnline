@@ -5,8 +5,7 @@ using UnityEngine;
 public enum ChatType
 {
     chatPublic,
-    chatPrivate1,
-    chatPrivate2,
+    chatPrivate,
     chatSay
 }
 
