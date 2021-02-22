@@ -12,6 +12,10 @@ public class ChatBoxManager : MonoBehaviour
     public GameObject scrollDownTextButton;
     public GameObject UITrash;
 
+    public int maxNumOfMessages;//maximun amount of shown messages at 1 time
+    public float inactivityChatTimer;// amount of time after witch the chat resets to the latest messages
+    public float innerInactivityChatTimer;
+
     private List<ChatConv> chats;
     private List<List<string>> savedChats;
     private List<int> chatNumb;
@@ -43,6 +47,7 @@ public class ChatBoxManager : MonoBehaviour
     void Update()
     {
         ShowScrollButtons();
+        InactiveChatTimer();
 
     }
 
@@ -57,7 +62,15 @@ public class ChatBoxManager : MonoBehaviour
 
             for (int i = 0; i < chats[_chat].conversation[_message].chatText.Count; i++)//for each line in this message
             {
-                savedChats[_chat].Add(chats[_chat].conversation[_message].chatText[i]); //add text to saved for that chat
+                if (i == 0)//check if it is the 1st message so the name is added
+                {
+                    savedChats[_chat].Add("[" + chats[_chat].conversation[_message].characterName + "] " + chats[_chat].conversation[_message].chatText[i]);
+                }
+                else//dont add name
+                {
+                    savedChats[_chat].Add(chats[_chat].conversation[_message].chatText[i]);
+                }
+
 
                 //check if the scroll up is active
                 if(!scrolling)
@@ -120,10 +133,9 @@ public class ChatBoxManager : MonoBehaviour
 
     void CheckOverflow(int _chat)
     {
-        Debug.Log("Num of child: " + generalTextContainer.transform.childCount);
+
         if (generalTextContainer.transform.childCount > 8)
         {
-            Debug.Log("destroyed 1 child");
             GameObject trashtext = generalTextContainer.transform.GetChild(0).gameObject;
             trashtext.transform.SetParent(UITrash.transform);
             Destroy(trashtext);
@@ -133,7 +145,7 @@ public class ChatBoxManager : MonoBehaviour
 
     void ShowScrollButtons()
     {
-        if (chatNumb[currentChat] > 8)
+        if (chatNumb[currentChat] > maxNumOfMessages)
         {
             scrollUpTextButton.SetActive(true);
         }
@@ -153,9 +165,57 @@ public class ChatBoxManager : MonoBehaviour
         }
     }
 
+
+    void ActivatedChat()
+    {
+        innerInactivityChatTimer = inactivityChatTimer;//triggers the timer
+        scrolling = true;
+    }
+
+    void ResetInactivityChatTimer()
+    {
+        innerInactivityChatTimer = 0;
+        scrolling = false;
+    }
+
+    void InactiveChatTimer()
+    {
+        if (scrolling)
+        {
+            if (innerInactivityChatTimer > 0)
+            {
+                innerInactivityChatTimer -= Time.deltaTime;//ticking time
+            }
+            else// reset the chat
+            {
+                
+                //clear all messages
+              foreach(Transform text in generalTextContainer.transform)
+                {
+                    GameObject.Destroy(text.gameObject);
+
+                }
+              
+                //add lastest messages
+                for (int i = 0; i < maxNumOfMessages; i++)
+                {
+                    GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
+                    newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][savedChats[currentChat].Count - (maxNumOfMessages-i)];
+                    chatNumb[0] = savedChats[currentChat].Count - 1;
+                }
+              
+                scrolling = false;
+            }
+        }
+        
+    }
+
+
+
     public void ScrollUpText()
     {
-        scrolling = true;
+        
+        ActivatedChat();
         //remove i
         GameObject trashtext = generalTextContainer.transform.GetChild(generalTextContainer.transform.childCount-1).gameObject;
         trashtext.transform.SetParent(UITrash.transform);
@@ -164,7 +224,7 @@ public class ChatBoxManager : MonoBehaviour
         chatNumb[0] -= 1;
         //add i-6
         GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
-        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0] - 8];
+        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0] - maxNumOfMessages];
         newText.transform.SetAsFirstSibling();
 
 
@@ -177,7 +237,7 @@ public class ChatBoxManager : MonoBehaviour
         GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
         newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0] + 1];
 
-        //remove i-6
+        //remove top message
         GameObject trashtext = generalTextContainer.transform.GetChild(0).gameObject;
         trashtext.transform.SetParent(UITrash.transform);
         Destroy(trashtext);
@@ -188,6 +248,7 @@ public class ChatBoxManager : MonoBehaviour
         if(chatNumb[0] == savedChats[currentChat].Count-1)
         {
             scrolling = false;
+            ResetInactivityChatTimer();
         }
     }
 
