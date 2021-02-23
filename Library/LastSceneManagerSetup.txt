@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Game/FarPersonGame.unity
+- path: Assets/Scenes/Art/Art1.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
