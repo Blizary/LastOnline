@@ -12,6 +12,7 @@ public class LoadingSceenManager : MonoBehaviour
     [SerializeField] private List<string> tips;
     [SerializeField] private GameObject loadingBar;
     [SerializeField] private GameObject tipUI;
+    [SerializeField] private GameObject fadePanel;
     private string currentTip;
 
 
@@ -45,6 +46,7 @@ public class LoadingSceenManager : MonoBehaviour
         }
         else
         {
+            fadePanel.GetComponent<Animator>().SetTrigger("Fade");
             //loadNextScene
         }
     }
