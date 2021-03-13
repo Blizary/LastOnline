@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LoadingSceenManager : MonoBehaviour
+public class LoadingScreenManager : MonoBehaviour
 {
     [SerializeField] private float loadingTimer;
     private float innerLoadingTimer;
@@ -25,7 +25,7 @@ public class LoadingSceenManager : MonoBehaviour
         int rand = Random.Range(0, tips.Count);
         currentTip = tips[rand];
         tipUI.GetComponent<TextMeshProUGUI>().text = currentTip;
-        loadingBar.GetComponent<Image>().fillAmount = 1-(innerLoadingTimer / loadingTimer);
+        loadingBar.GetComponent<Image>().fillAmount = 1 - (innerLoadingTimer / loadingTimer);
 
     }
 
@@ -33,15 +33,15 @@ public class LoadingSceenManager : MonoBehaviour
     void Update()
     {
         LoadingTimerTick();
-        
+
     }
 
     void LoadingTimerTick()
     {
-        if(innerLoadingTimer >= 0)
+        if (innerLoadingTimer >= 0)
         {
             innerLoadingTimer -= Time.deltaTime;
-            loadingBar.GetComponent<Image>().fillAmount = 1-(innerLoadingTimer / loadingTimer);
+            loadingBar.GetComponent<Image>().fillAmount = 1 - (innerLoadingTimer / loadingTimer);
             CheckBarProgress();
         }
         else
@@ -54,7 +54,7 @@ public class LoadingSceenManager : MonoBehaviour
 
     void CheckBarProgress()
     {
-        if(constallations[1].activeInHierarchy==false)
+        if (constallations[1].activeInHierarchy == false)
         {
             if (loadingBar.GetComponent<Image>().fillAmount >= 0.25)
             {
@@ -82,3 +82,5 @@ public class LoadingSceenManager : MonoBehaviour
 
     }
 }
+
+
