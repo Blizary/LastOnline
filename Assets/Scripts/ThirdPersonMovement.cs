@@ -10,6 +10,8 @@ public class ThirdPersonMovement : MonoBehaviour
     public float rotSpeed;
     float turnSmoothVel;
 
+    public bool hasTarget;
+
     // Start is called before the first frame update
     void Start()
     {
