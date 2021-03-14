@@ -5,6 +5,7 @@ using UnityEngine;
 public class ThirdPersonMovement : MonoBehaviour
 {
     CharacterController controller;
+    FarPersonManager manager;
     public Transform cam;
     public float speed;
     public float rotSpeed;
@@ -16,6 +17,7 @@ public class ThirdPersonMovement : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<FarPersonManager>();
     }
 
     // Update is called once per frame
@@ -36,6 +38,36 @@ public class ThirdPersonMovement : MonoBehaviour
         }
 
 
+        //mouse click
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            Targetted();
+        }
 
     }
+
+    void Targetted()
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast (ray, out hit,100.0f))
+        {
+            //found a target
+            if(hit.transform.gameObject.GetComponent<NPCController>())
+            {
+                //found a npc
+                Debug.Log("found yah");
+                manager.UpdateTarget(hit.transform.gameObject.GetComponent<NPCController>().npcInfo);
+            }
+            else
+            {
+                manager.NoTarget();
+            }
+        }
+       
+    }
+
+
+ 
 }

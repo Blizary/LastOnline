@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FarPersonManager : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class FarPersonManager : MonoBehaviour
     [SerializeField] private string noTargetMessage;
     [SerializeField] private string friendlyTargetMessage;
     [SerializeField] private GameObject warningOBJ;
+    [SerializeField] private GameObject targetFrame;
+    [SerializeField] private GameObject targetName;
+    [SerializeField] private GameObject targetIcon;
+
 
     private GameObject player;
     // Start is called before the first frame update
@@ -53,4 +58,19 @@ public class FarPersonManager : MonoBehaviour
             warningOBJ.GetComponent<WarningController>().StartTimer();
         }
     }
+
+
+    public void UpdateTarget(NPC _newTarget)
+    {
+        targetIcon.GetComponent<Image>().sprite = _newTarget.npcImage;
+        targetName.GetComponent<TextMeshProUGUI>().text = _newTarget.npcName;
+        targetFrame.SetActive(true);
+    }
+
+    public void NoTarget()
+    {
+        targetFrame.SetActive(false);
+    }
+
+    
 }
