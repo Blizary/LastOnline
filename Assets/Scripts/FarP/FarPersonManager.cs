@@ -38,11 +38,19 @@ public class FarPersonManager : MonoBehaviour
     {
         if(player.GetComponent<ThirdPersonMovement>().hasTarget)
         {
+            string oldText = warningOBJ.GetComponent<TextMeshProUGUI>().text;
             warningOBJ.GetComponent<TextMeshProUGUI>().text = friendlyTargetMessage;
+            warningOBJ.GetComponent<TextMeshProUGUI>().text += "\n";
+            warningOBJ.GetComponent<TextMeshProUGUI>().text += oldText;
+            warningOBJ.GetComponent<WarningController>().StartTimer();
         }
         else
         {
+            string oldText = warningOBJ.GetComponent<TextMeshProUGUI>().text;
             warningOBJ.GetComponent<TextMeshProUGUI>().text = noTargetMessage;
+            warningOBJ.GetComponent<TextMeshProUGUI>().text += "\n" ;
+            warningOBJ.GetComponent<TextMeshProUGUI>().text += oldText;
+            warningOBJ.GetComponent<WarningController>().StartTimer();
         }
     }
 }
