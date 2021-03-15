@@ -16,7 +16,7 @@ public class FarPersonManager : MonoBehaviour
     [SerializeField] private GameObject targetIcon;
 
 
-    private GameObject player;
+    public GameObject player;
     // Start is called before the first frame update
     void Start()
     {
@@ -65,11 +65,13 @@ public class FarPersonManager : MonoBehaviour
         targetIcon.GetComponent<Image>().sprite = _newTarget.npcImage;
         targetName.GetComponent<TextMeshProUGUI>().text = _newTarget.npcName;
         targetFrame.SetActive(true);
+        player.GetComponent<ThirdPersonMovement>().hasTarget = true;
     }
 
     public void NoTarget()
     {
         targetFrame.SetActive(false);
+        player.GetComponent<ThirdPersonMovement>().hasTarget = false;
     }
 
     

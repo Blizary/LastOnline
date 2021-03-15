@@ -15,14 +15,13 @@ public class ChatBoxManager : MonoBehaviour
 
     public int maxNumOfMessages;//maximun amount of shown messages at 1 time
     public float inactivityChatTimer;// amount of time after witch the chat resets to the latest messages
-    public float innerInactivityChatTimer;
+    private float innerInactivityChatTimer;
 
-    private List<ChatConv> chats;
-    private List<List<string>> savedChats;
-    private List<int> chatNumb;
+    public List<Tab> tabs;
+
+
     private int currentChat;
     private bool scrolling;
-
     private int currentChatIndx;
     private FarPersonManager manager;
 
@@ -33,9 +32,8 @@ public class ChatBoxManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        chats = new List<ChatConv>();
-        chatNumb = new List<int>();
-        savedChats = new List<List<string>>();
+        tabs = new List<Tab>();
+
         currentChat = 0;
         manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<FarPersonManager>();
         scrolling = false;
@@ -47,8 +45,8 @@ public class ChatBoxManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ShowScrollButtons();
-        InactiveChatTimer();
+       ShowScrollButtons();
+       InactiveChatTimer();
 
     }
 
@@ -58,36 +56,36 @@ public class ChatBoxManager : MonoBehaviour
     /// <param name="_nextMessage"></param>
     void ReadNextMessage(int _chat, int _message)
     {
-        if (chats[_chat].conversation.Count > _message)//check if there are any messages left in this conversation
+        if (tabs[_chat].tabChat.Count > _message)//check if there are any messages left in this conversation
         {
-            //check if it is a private chat
 
 
-            for (int i = 0; i < chats[_chat].conversation[_message].chatText.Count; i++)//for each line in this message
+            for (int i = 0; i < tabs[_chat].tabChat[_message].chatText.Count; i++)//for each line in this message
             {
                 if (i == 0)//check if it is the 1st message so the name is added
                 {
-                    savedChats[_chat].Add("[" + chats[_chat].conversation[_message].characterName + "] " + chats[_chat].conversation[_message].chatText[i]);
+                    tabs[_chat].displayedText.Add("[" + tabs[_chat].tabChat[_message].characterName + "] " + tabs[_chat].tabChat[_message].chatText[i]);
                 }
                 else//dont add name
                 {
-                    savedChats[_chat].Add(chats[_chat].conversation[_message].chatText[i]);
+                    tabs[_chat].displayedText.Add(tabs[_chat].tabChat[_message].chatText[i]);
                 }
 
 
                 //check if the scroll up is active
-                if(!scrolling)
+                if(!scrolling && currentChat ==_chat)
                 {
                     GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);//create a new line        
                     if (i == 0)//check if it is the 1st message so the name is added
                     {
-                        newText.GetComponent<TextMeshProUGUI>().text = "[" + chats[_chat].conversation[_message].characterName + "] " + chats[_chat].conversation[_message].chatText[i];
+                        newText.GetComponent<TextMeshProUGUI>().text = "[" + tabs[_chat].tabChat[_message].characterName + "] " + tabs[_chat].tabChat[_message].chatText[i];
                     }
                     else//dont add name
                     {
-                        newText.GetComponent<TextMeshProUGUI>().text = chats[_chat].conversation[_message].chatText[i];
+                        newText.GetComponent<TextMeshProUGUI>().text = tabs[_chat].tabChat[_message].chatText[i];
                     }
-                    chatNumb[0] += 1;//current chat possion
+                    tabs[_chat].currentText += 1;
+                    //chatNumb[0] += 1;//current chat possion
 
                     CheckOverflow(0);//check if overflow
                 }
@@ -97,7 +95,7 @@ public class ChatBoxManager : MonoBehaviour
 
 
 
-            StartCoroutine(WaitForNextSentence(chats[_chat].conversation[_message].timer, _chat, _message + 1));
+            StartCoroutine(WaitForNextSentence(tabs[_chat].tabChat[_message].timer, _chat, _message + 1));
         }
 
     }
@@ -110,19 +108,42 @@ public class ChatBoxManager : MonoBehaviour
     {
         for (int i = 0; i < manager.chatbox.Count; i++)
         {
-            chats.Add(manager.chatbox[i]);
+            Tab newTab = new Tab();
+            //get the name
+            if(manager.chatbox[i].chatType==ChatType.chatPublic)
+            {
+                newTab.tabName = "General";
+                GameObject newtabDisplay = Instantiate(tabsPrefab, tabsContainer.transform);//create a new tab    
+            }
+            else
+            {
+                newTab.tabName = manager.chatbox[i].conversation[0].characterName;
+            }
+
+            //get the conversation
+            newTab.tabChat = manager.chatbox[i].conversation;
+
+            //set type
+            newTab.type = manager.chatbox[i].chatType;
+
+            //start at 0 chat
+            newTab.currentText = 0;
+            //inicialize lists
+            newTab.displayedText = new List<string>();
+            newTab.tabNum = i;
+
+            tabs.Add(newTab);
+
+
         }
     }
 
 
     void StartChat()
     {
-        for (int i = 0; i < chats.Count; i++)
+        for (int i = 0; i < tabs.Count; i++)
         {
-            StartCoroutine(WaitForNextSentence(chats[i].conversation[0].timer, i, 0));
-            List<string> newstrings = new List<string>();
-            savedChats.Add(newstrings);
-            chatNumb.Add(0);
+            StartCoroutine(WaitForNextSentence(tabs[i].tabChat[0].timer, i, 0));
         }
     }
 
@@ -130,6 +151,17 @@ public class ChatBoxManager : MonoBehaviour
     {
         //wait for timer
         yield return new WaitForSeconds(_timer);
+        //check if it is a new tab
+        if (tabs[_chat].type == ChatType.chatPrivate)
+        {
+            if(_message == 0)
+            {
+                GameObject newtabDisplay = Instantiate(tabsPrefab, tabsContainer.transform);//create a new tab  
+                newtabDisplay.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = tabs[_chat].tabName;
+                newtabDisplay.GetComponent<TabController>().tabnum = tabs[_chat].tabNum;
+            }
+        }
+
         //read next message
         ReadNextMessage(_chat, _message);
     }
@@ -148,7 +180,7 @@ public class ChatBoxManager : MonoBehaviour
 
     void ShowScrollButtons()
     {
-        if (chatNumb[currentChat] > maxNumOfMessages)
+        if (tabs[currentChat].currentText > maxNumOfMessages)
         {
             scrollUpTextButton.SetActive(true);
         }
@@ -158,7 +190,7 @@ public class ChatBoxManager : MonoBehaviour
         }
 
 
-        if (chatNumb[currentChat] < savedChats[currentChat].Count-1)
+        if (tabs[currentChat].currentText < tabs[currentChat].displayedText.Count - 1)
         {
             scrollDownTextButton.SetActive(true);
         }
@@ -203,8 +235,8 @@ public class ChatBoxManager : MonoBehaviour
                 for (int i = 0; i < maxNumOfMessages; i++)
                 {
                     GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
-                    newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][savedChats[currentChat].Count - (maxNumOfMessages-i)];
-                    chatNumb[0] = savedChats[currentChat].Count - 1;
+                    newText.GetComponent<TextMeshProUGUI>().text = tabs[currentChat].displayedText[tabs[currentChat].displayedText.Count - (maxNumOfMessages-i)];
+                    tabs[currentChat].currentText = tabs[currentChat].displayedText.Count - 1;
                 }
               
                 scrolling = false;
@@ -224,10 +256,10 @@ public class ChatBoxManager : MonoBehaviour
         trashtext.transform.SetParent(UITrash.transform);
         Destroy(trashtext);
 
-        chatNumb[0] -= 1;
+        tabs[currentChat].currentText -= 1;
         //add i-6
         GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
-        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0] - maxNumOfMessages];
+        newText.GetComponent<TextMeshProUGUI>().text = tabs[currentChat].displayedText[tabs[currentChat].currentText - maxNumOfMessages];
         newText.transform.SetAsFirstSibling();
 
 
@@ -238,21 +270,28 @@ public class ChatBoxManager : MonoBehaviour
 
         //add i+1
         GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
-        newText.GetComponent<TextMeshProUGUI>().text = savedChats[currentChat][chatNumb[0] + 1];
+        newText.GetComponent<TextMeshProUGUI>().text = tabs[currentChat].displayedText[tabs[currentChat].currentText + 1];
 
         //remove top message
         GameObject trashtext = generalTextContainer.transform.GetChild(0).gameObject;
         trashtext.transform.SetParent(UITrash.transform);
         Destroy(trashtext);
 
-        chatNumb[0] += 1;
+        tabs[currentChat].currentText += 1;
 
         //check if the player is on the last available message
-        if(chatNumb[0] == savedChats[currentChat].Count-1)
+        if(tabs[currentChat].currentText == tabs[currentChat].displayedText.Count-1)
         {
             scrolling = false;
             ResetInactivityChatTimer();
         }
+    }
+
+
+    public void TabsButton(int _tabNum)
+    {
+        currentChat = _tabNum;
+        Debug.Log(currentChat);
     }
 
 }

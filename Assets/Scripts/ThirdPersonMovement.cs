@@ -45,6 +45,16 @@ public class ThirdPersonMovement : MonoBehaviour
             Targetted();
         }
 
+        //close opend tabs and remove targets
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            manager.NoTarget();
+        }
+
+
+
+
+
     }
 
     void Targetted()
@@ -57,12 +67,7 @@ public class ThirdPersonMovement : MonoBehaviour
             if(hit.transform.gameObject.GetComponent<NPCController>())
             {
                 //found a npc
-                Debug.Log("found yah");
                 manager.UpdateTarget(hit.transform.gameObject.GetComponent<NPCController>().npcInfo);
-            }
-            else
-            {
-                manager.NoTarget();
             }
         }
        
