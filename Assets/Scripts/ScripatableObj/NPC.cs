@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewNPC", menuName = "ScriptableObj/ NPC", order = 3)]
+[CreateAssetMenu(fileName = "NewNPC", menuName = "ScriptableObj/ NPC", order = 4)]
 public class NPC : ScriptableObject
 {
     public Sprite npcImage;

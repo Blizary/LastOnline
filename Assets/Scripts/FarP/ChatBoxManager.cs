@@ -93,9 +93,17 @@ public class ChatBoxManager : MonoBehaviour
                
             }
 
-
-
-            StartCoroutine(WaitForNextSentence(tabs[_chat].tabChat[_message].timer, _chat, _message + 1));
+            //check if it requires an awnser
+            if(tabs[_chat].tabChat[_message].options.Count !=0)
+            {
+                //wait for anwser
+            }
+            else
+            {
+                //start timer for next sentence
+                StartCoroutine(WaitForNextSentence(tabs[_chat].tabChat[_message].timer, _chat, _message + 1));
+            }
+           
         }
 
     }
@@ -291,7 +299,21 @@ public class ChatBoxManager : MonoBehaviour
     public void TabsButton(int _tabNum)
     {
         currentChat = _tabNum;
-        Debug.Log(currentChat);
+
+        //clear all messages
+        foreach (Transform text in generalTextContainer.transform)
+        {
+            GameObject.Destroy(text.gameObject);
+        }
+
+        //add lastest messages
+        for (int i = 0; i < maxNumOfMessages; i++)
+        {
+            GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);
+            newText.GetComponent<TextMeshProUGUI>().text = tabs[currentChat].displayedText[tabs[currentChat].displayedText.Count - (maxNumOfMessages - i)];
+            tabs[currentChat].currentText = tabs[currentChat].displayedText.Count - 1;
+        }
+
     }
 
 }

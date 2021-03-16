@@ -8,4 +8,5 @@ public class ChatText : ScriptableObject
     public string characterName;//character that is saying this text
     public List<string> chatText;// text
     public float timer;//time between this text and the previous one
+    public List<ChatOption> options;
 }

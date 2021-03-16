@@ -27,14 +27,22 @@ public class ThirdPersonMovement : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 dir = new Vector3(horizontal, 0f, vertical).normalized;
 
-        if(dir.magnitude>=0.1f)
+        if (!manager.inChat)//the player is currently not typing in chat
         {
-            float targetAngle = Mathf.Atan2(dir.x, dir.z)*Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle,ref turnSmoothVel, rotSpeed);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+            //movement
+            if (dir.magnitude >= 0.1f)
+            {
+                float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVel, rotSpeed);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            controller.Move(moveDir.normalized * speed * Time.deltaTime);
+                Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+                controller.Move(moveDir.normalized * speed * Time.deltaTime);
+            }
+        }
+        else
+        {
+
         }
 
 
@@ -49,6 +57,10 @@ public class ThirdPersonMovement : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             manager.NoTarget();
+            if(manager.inChat)
+            {
+                manager.CloseChat();
+            }
         }
 
 

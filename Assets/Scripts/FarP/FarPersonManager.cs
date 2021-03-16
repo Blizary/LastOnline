@@ -14,8 +14,10 @@ public class FarPersonManager : MonoBehaviour
     [SerializeField] private GameObject targetFrame;
     [SerializeField] private GameObject targetName;
     [SerializeField] private GameObject targetIcon;
+    [SerializeField] private GameObject optionsPanel;
 
 
+    public bool inChat;
     public GameObject player;
     // Start is called before the first frame update
     void Start()
@@ -74,5 +76,17 @@ public class FarPersonManager : MonoBehaviour
         player.GetComponent<ThirdPersonMovement>().hasTarget = false;
     }
 
-    
+    public void ChatStartButton()
+    {
+        inChat = true;
+        optionsPanel.SetActive(true);
+
+    }
+
+
+    public void CloseChat()
+    {
+        inChat = false;
+        optionsPanel.SetActive(false);
+    }
 }
