@@ -11,4 +11,5 @@ public class Tab
     public List<string> displayedText;
     public ChatType type;
     public int tabNum;
+    public ChatText lastMessage;
 }

@@ -80,7 +80,10 @@ public class FarPersonManager : MonoBehaviour
     {
         inChat = true;
         optionsPanel.SetActive(true);
-
+        for (int i = 0; i < optionsPanel.transform.childCount; i++)
+        {
+            optionsPanel.transform.GetChild(i).gameObject.SetActive(true);
+        }
     }
 
 
@@ -89,4 +92,6 @@ public class FarPersonManager : MonoBehaviour
         inChat = false;
         optionsPanel.SetActive(false);
     }
+
+   
 }

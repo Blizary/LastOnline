@@ -6,6 +6,7 @@ public class TabController : MonoBehaviour
 {
     private ChatBoxManager chatManager;
     public int tabnum;
+    public string tabname;
     // Start is called before the first frame update
     void Start()
     {
