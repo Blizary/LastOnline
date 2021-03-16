@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class FarPersonManager : MonoBehaviour
 {
+    public string playerName;
+
     public List<ChatConv> chatbox;
     [SerializeField] private GameObject inventoryOBJ;
     [SerializeField] private string noTargetMessage;
@@ -15,6 +17,7 @@ public class FarPersonManager : MonoBehaviour
     [SerializeField] private GameObject targetName;
     [SerializeField] private GameObject targetIcon;
     [SerializeField] private GameObject optionsPanel;
+    [SerializeField] private GameObject playerAwnser;
 
 
     public bool inChat;
@@ -91,6 +94,17 @@ public class FarPersonManager : MonoBehaviour
     {
         inChat = false;
         optionsPanel.SetActive(false);
+    }
+
+    public void AddAwnser(char _letter)
+    {
+        playerAwnser.GetComponent<TextMeshProUGUI>().text += _letter;
+        
+    }
+
+    public void ClearAwnser()
+    {
+        playerAwnser.GetComponent<TextMeshProUGUI>().text = "";
     }
 
    

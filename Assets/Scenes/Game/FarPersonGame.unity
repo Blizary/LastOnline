@@ -1910,7 +1910,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 15.7, y: -104.5}
+  m_AnchoredPosition: {x: 15.699997, y: -104.5}
   m_SizeDelta: {x: -31.384583, y: -206.61537}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &342126536
@@ -10175,7 +10175,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -147.70001, y: -217.6}
+  m_AnchoredPosition: {x: -147.70001, y: -217.59998}
   m_SizeDelta: {x: -725.15094, y: -435.24097}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1851434092
@@ -11527,6 +11527,8 @@ MonoBehaviour:
   speed: 6
   rotSpeed: 0.1
   hasTarget: 0
+  currentAwnser: 
+  currentOption: {fileID: 0}
 --- !u!1 &2044443811
 GameObject:
   m_ObjectHideFlags: 0
@@ -12343,6 +12345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ea09ae0c241c74389725065ce10afa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: 
   chatbox:
   - {fileID: 11400000, guid: 75b36e26aa9f4de4a907d8bd2af68ec8, type: 2}
   - {fileID: 11400000, guid: a4fa2c46c33d0e94fb6df84b43168ce5, type: 2}
@@ -12354,6 +12357,7 @@ MonoBehaviour:
   targetName: {fileID: 402896066}
   targetIcon: {fileID: 1726469025}
   optionsPanel: {fileID: 1851434090}
+  playerAwnser: {fileID: 1835065332}
   inChat: 0
   player: {fileID: 0}
 --- !u!4 &2140448124

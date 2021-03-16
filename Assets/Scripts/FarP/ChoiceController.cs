@@ -31,7 +31,7 @@ public class ChoiceController : MonoBehaviour
 
     public void ChoiceChoosen()
     {
-        chatManager.ChoiceMade(currentOption.npcAnwser);
+        chatManager.ChoiceMade(currentOption, currentOption.npcAnwser,currentOption.playerAwnser);
     }
 
     public void SetValues(ChatOption _newOption)

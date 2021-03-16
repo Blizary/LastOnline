@@ -12,12 +12,18 @@ public class ThirdPersonMovement : MonoBehaviour
     float turnSmoothVel;
 
     public bool hasTarget;
+    
+    public string currentAwnser;
+    public ChatOption currentOption;
+
+    private ChatBoxManager chatManager;
 
     // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
         manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<FarPersonManager>();
+        chatManager = GameObject.FindGameObjectWithTag("ChatManager").GetComponent<ChatBoxManager>();
     }
 
     // Update is called once per frame
@@ -42,7 +48,23 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         else
         {
+            if(currentAwnser!="")
+            {
+                if(!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && Input.anyKeyDown)
+                {
+                    manager.AddAwnser(currentAwnser[0]);
+                    currentAwnser = currentAwnser.Remove(0,1);
+                }
+            }
+            else
+            {
+                if(Input.GetKeyDown(KeyCode.Return))
+                {
+                    chatManager.SendAwnser(currentOption);
+                    manager.CloseChat();
 
+                }
+            }
         }
 
 

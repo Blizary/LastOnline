@@ -25,6 +25,7 @@ public class ChatBoxManager : MonoBehaviour
     private bool scrolling;
     private int currentChatIndx;
     private FarPersonManager manager;
+    private ThirdPersonMovement playerController;
 
 
     private float innerTimer;
@@ -37,6 +38,7 @@ public class ChatBoxManager : MonoBehaviour
 
         currentChat = 0;
         manager = GameObject.FindGameObjectWithTag("Manager").GetComponent<FarPersonManager>();
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<ThirdPersonMovement>();
         scrolling = false;
         messageFinnish = false;
         ReadChatLists();
@@ -117,6 +119,7 @@ public class ChatBoxManager : MonoBehaviour
                     }
                 }
 
+               
                 //wait for anwser
 
             }
@@ -341,6 +344,8 @@ public class ChatBoxManager : MonoBehaviour
             
         }
 
+        manager.CloseChat();
+
         //update the choices
         for (int i = 0; i < tabs[currentChat].lastMessage.options.Count; i++)
         {
@@ -350,24 +355,80 @@ public class ChatBoxManager : MonoBehaviour
     }
 
 
-    public void ChoiceMade(ChatText _nextText)
+    public void ChoiceMade(ChatOption _option, ChatText _nextText,List<string> _awnser)
     {
-        Debug.Log("choice made");
-        if (_nextText.options.Count != 0)
+        string newAwnser = "";
+        for(int i = 0;i< _awnser.Count;i++)
         {
-            StartCoroutine(WaitForNextSentence(_nextText.timer, tabs[currentChat], 1, _nextText));
+            newAwnser += _awnser[i]+" ";
         }
-        else
-        {
-            StartCoroutine(WaitForNextSentence(_nextText.timer, tabs[currentChat], tabs[currentChat].tabChat.Count-1, _nextText));
-        }
+        playerController.currentAwnser = newAwnser;
+        playerController.currentOption = _option;
 
-        manager.CloseChat();
 
+        //clear options
         for (int i = 0; i < optionsPanel.transform.childCount; i++)
         {
             optionsPanel.transform.GetChild(i).gameObject.GetComponent<ChoiceController>().ClearValues();
         }
+
+        
+
+    }
+
+    public void SendAwnser(ChatOption _nextText)
+    {
+        playerController.currentAwnser = "";
+        playerController.currentOption = null;
+        manager.ClearAwnser();
+
+        //print awnser
+
+        for (int i = 0; i < _nextText.playerAwnser.Count; i++)//for each line in this message
+        {
+            if (i == 0)//check if it is the 1st message so the name is added
+            {
+                tabs[currentChat].displayedText.Add("[" + manager.playerName + "] " + _nextText.playerAwnser[i]);
+            }
+            else//dont add name
+            {
+                tabs[currentChat].displayedText.Add(_nextText.playerAwnser[i]);
+            }
+
+
+            //check if the scroll up is active
+            if (!scrolling && currentChat == tabs[currentChat].tabNum)
+            {
+                GameObject newText = Instantiate(textPrefab, generalTextContainer.transform);//create a new line        
+                if (i == 0)//check if it is the 1st message so the name is added
+                {
+                    newText.GetComponent<TextMeshProUGUI>().text = "[" + manager.playerName + "] " + _nextText.playerAwnser[i];
+                }
+                else//dont add name
+                {
+                    newText.GetComponent<TextMeshProUGUI>().text = _nextText.playerAwnser[i];
+                }
+                tabs[currentChat].currentText += 1;
+                //chatNumb[0] += 1;//current chat possion
+
+                CheckOverflow(0);//check if overflow
+            }
+
+
+        }
+
+        //close options
+        manager.CloseChat();
+
+        if (_nextText.npcAnwser.options.Count != 0)
+        {
+            StartCoroutine(WaitForNextSentence(_nextText.npcAnwser.timer, tabs[currentChat], 1, _nextText.npcAnwser));
+        }
+        else
+        {
+            StartCoroutine(WaitForNextSentence(_nextText.npcAnwser.timer, tabs[currentChat], tabs[currentChat].tabChat.Count - 1, _nextText.npcAnwser));
+        }
+
 
     }
 
