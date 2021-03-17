@@ -15,5 +15,5 @@ MonoBehaviour:
   feelingName: Angry
   playerAwnser:
   - Billy why man
-  - i dont even know you7
+  - i dont even know you
   npcAnwser: {fileID: 11400000, guid: 042957e2038c2f542b3154c212a0d962, type: 2}

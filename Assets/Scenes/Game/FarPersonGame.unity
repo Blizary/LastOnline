@@ -12345,7 +12345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ea09ae0c241c74389725065ce10afa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: 
+  playerName: Kirby
   chatbox:
   - {fileID: 11400000, guid: 75b36e26aa9f4de4a907d8bd2af68ec8, type: 2}
   - {fileID: 11400000, guid: a4fa2c46c33d0e94fb6df84b43168ce5, type: 2}

@@ -114,12 +114,14 @@ public class ChatBoxManager : MonoBehaviour
                     //set options
                     for (int i = 0; i < _newText.options.Count; i++)
                     {
-                        optionsPanel.transform.GetChild(i).GetComponent<ChoiceController>().currentOption = _newText.options[i];
-                        optionsPanel.transform.GetChild(i).GetChild(0).GetComponent<TextMeshProUGUI>().text = _newText.options[i].feelingName;
+                        optionsPanel.transform.GetChild(i).GetComponent<ChoiceController>().SetValues(tabs[currentChat].lastMessage.options[i]);
                     }
                 }
 
-               
+                if (!scrolling && currentChat == _currentTab.tabNum)//show the options to pick if it is the active chat
+                {
+                    manager.ChatStartButton();
+                }
                 //wait for anwser
 
             }
@@ -351,6 +353,12 @@ public class ChatBoxManager : MonoBehaviour
         {
             optionsPanel.transform.GetChild(i).GetComponent<ChoiceController>().SetValues(tabs[currentChat].lastMessage.options[i]);
         }
+        
+        if(tabs[currentChat].lastMessage.options.Count!=0)
+        {
+            manager.ChatStartButton();
+        }
+        
 
     }
 
